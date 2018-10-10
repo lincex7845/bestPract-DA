@@ -22,6 +22,8 @@ libraryDependencies ++= Seq(
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging"	%%  "scala-logging"	          % "3.9.0",
   "org.reactivemongo"           %%  "reactivemongo"           % "0.16.0",
+  "org.reactivemongo"           %%  "reactivemongo-play-json" % "0.16.0-play26",
+  "com.typesafe.play"           %%  "play-json"               % "2.6.1",
   "ch.qos.logback"              %   "logback-classic"         % "1.2.3",
   "com.typesafe.akka"           %% "akka-stream"              % "2.5.11",
   "com.typesafe.akka"           %   "akka-slf4j_2.12"         % "2.5.12",

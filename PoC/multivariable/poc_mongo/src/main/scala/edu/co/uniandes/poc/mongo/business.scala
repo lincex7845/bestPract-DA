@@ -52,8 +52,9 @@ object BusinessRecord {
 trait BusinessDAO {
 
   import scala.concurrent.duration._
+  import reactivemongo.api.commands.bson.BSONCountCommandImplicits._
 
-  def find(query: BSONDocument, maxDocs: Int)(implicit ec: ExecutionContext, c: Connector): Task[List[BusinessRecord]] = {
+  def find[T >: BSONDocument](query: T, maxDocs: Int)(implicit ec: ExecutionContext, c: Connector): Task[List[BusinessRecord]] = {
    for{
      collection <- c.businessCollection
      records <- Task.deferFuture(collection.find(query, None)
