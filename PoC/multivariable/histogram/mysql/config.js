@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = {
-    name: 'mysql-histogram',
+    name: 'mysql_histogram',
     version: 1,
     env: process.env.NODE_ENV || 'development',
     port: process.env.POST || '3300',

@@ -1,7 +1,7 @@
 select * from tesis.business where stars between 4 and 5 limit 0,10;
 select count(*) from business;
 
-select stars, count(*) as total from tesis.business group by stars order by total desc;
+select stars, count(*) as records from tesis.business group by stars order by records desc;
 
 SELECT @@global.secure_file_priv;
 select * from tesis.business into OUTFILE '/var/lib/mysql-files/tesis_business_memory';
@@ -14,4 +14,7 @@ alter table business_memory ENGINE = MEMORY;
 
 /*truncate business_memory;*/
 select count(*) from business_memory;
+select * from tesis.business where stars between 4 and 5 limit 0,10;
 select stars, count(*) as total from tesis.business_memory group by stars order by total desc;
+
+/*CREATE INDEX RATINGS ON tesis.business (stars);*/
