@@ -70,7 +70,14 @@ module.exports = function (ctx) {
         let t0sql = process.hrtime();
         let countFiltered;
         if (state === '*' && stars === '*') {
-
+            mysql_conn.query("select count(*) as countFiltered from business",
+                function (err, rows) {
+                    if (err) console.error(err)
+                    else {
+                        countFiltered = rows[0].countFiltered;
+                    }
+                }
+            );
             mysql_conn.query("select * from business limit " + offset + "," + (offset + length),
                 (err, rows) => {
                     if (err) res.send(500, err);
@@ -89,7 +96,7 @@ module.exports = function (ctx) {
             );
         }
         else {
-            
+
             mysql_conn.query("select count(*) as countFiltered from business where stars = " + stars + " and state = '" + state + "'",
                 function (err, rows) {
                     if (err) console.error(err)

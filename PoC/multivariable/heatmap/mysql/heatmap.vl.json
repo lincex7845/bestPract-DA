@@ -12,12 +12,13 @@
     },
     "mark": "rect",
     "encoding": {
-      "y": {"field": "state", "type": "ordinal"},
+      "y": {"field": "state", "type": "nominal"},
       "x": {"field": "stars", "type": "ordinal"},
       "color": {
         "condition": {
           "selection": "pts",
           "field": "avg_review_count",
+          "title": "mean reviews",
           "type": "quantitative"
         },
         "value": "grey"
