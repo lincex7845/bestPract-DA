@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>PoC Vega histogram + Pagination + MySQL</title>
+    <title>Poc Vega heatmap + pagination + MySQL</title>
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
 </head>
 
@@ -55,19 +55,22 @@
             $('#info').html("<label>Interval:&nbsp;</label><label id='interval'></label><button id='filter'>Ver Intervalo</button>");
         }
 
-        function getInterval(view) {
-            var data = view.getState({ data: vega.truthy, signals: vega.falsy, recurse: true }).data
-            var i;
-            if (data.brush_store.length !== 0) {
-                i = data.brush_store[0].intervals[0].extent;
-            }
-            else {
-                var i = [0, 5];
-            }
+        function getInterval() {
+            let i;
+            var marks = _view
+                .getState({ data: vega.truthy, signals: vega.falsy, recurse: true })
+                .data.marks;
+            var allMarks = marks.length
+            var selected = marks.filter(m => m.fill !== "grey");
+            if (selected.length !== allMarks){
+                const datum = selected[0].datum;
+                i = [datum.state, datum.stars];
+            } 
+            else i = ['*','*'];
             $('#interval').text("[" + i[0] + " , " + i[1] + "] ");
-            console.info("Interval: ", i);
             return i;
         }
+
 
         function filter(view) {
             setTable(view);
@@ -75,8 +78,8 @@
 
         function setTable() {
             var interval = getInterval(_view);
-            var min = interval[0];
-            var max = interval[1];
+            var state = interval[0];
+            var stars = interval[1];
             _table = $('#table').DataTable({
                 destroy: true,
                 processing: true,
@@ -85,12 +88,11 @@
                 scrollY: 300,
                 scrollCollapse: true,
                 searching: false,
-                ajax: "/business/" + min + "/" + max
+                ajax: "/business/" + state + "/" + stars
             });
         }
-
         $(document).ready(function () {
-            const spec = "histogram.vl.json";
+            const spec = "heatmap.vl.json";
             vegaEmbed('#vis', spec, { defaultStyle: true }).then(function (result) {
                 _view = result.view;
                 appendHtml();
