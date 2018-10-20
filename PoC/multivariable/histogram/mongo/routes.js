@@ -75,7 +75,7 @@ module.exports = function (ctx) {
 
     server.get('/business/:min/:max', (req, res, next) => {
         let min = parseFloat(req.params.min);
-        let max = parseInt(req.params.max);
+        let max = parseFloat(req.params.max);
         let query = req.query;
         let draw = query.draw ? parseInt(query.draw, 10) : 0;
         let length = query.length ? parseInt(query.length, 10) : PER_PAGE;
