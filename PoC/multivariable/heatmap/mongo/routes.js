@@ -15,16 +15,6 @@ const _REVIEW_COUNT = 'review_count'
 const _IS_OPEN = 'is_open'
 const total = 144072
 
-function formatHistogram(docs) {
-    var r = docs.map(doc => {
-        return {
-            stars: doc._id,
-            records: doc.count
-        }
-    });
-    return r;
-}
-
 function formatData(data) {
     var formatedData = data.map(function (o) {
         var newArray = new Array();
