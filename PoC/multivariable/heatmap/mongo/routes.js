@@ -14,6 +14,7 @@ const _STARS = 'stars'
 const _REVIEW_COUNT = 'review_count'
 const _IS_OPEN = 'is_open'
 const total = 144072
+const states = ["AZ","BW","EDH","ELN","ESX","FAL","FIF","FLN","HLD","IL","KHL","MLN","NC","NI","NLK","NTH","NV","NY","OH","ON","PA","PKN","QC","SC","SCB","STG","VT","WI","WLN"]
 
 function formatData(data) {
     var formatedData = data.map(function (o) {
@@ -48,9 +49,11 @@ module.exports = function (ctx) {
     server.get('/business/heatmap', (_, res, next) => {
         console.info("group by state and stars - starting");
         let t0h = process.hrtime();
+        const match = {$match: {stars: {$gte: 0, $lte:5}, state: {$in: states}}};
+        const project = {$project: {_id:0,stars:1,state:1,review_count:1}};
         const group = { $group: { _id: { state: "$state", stars: "$stars" }, avg_review_count: { $avg: "$review_count" } } };
-        const sort = { $sort: { "_id.state": 1, "_id.stars": 1 } }
-        business.aggregate([group, sort])
+        const sort = { $sort: { "_id.state": 1, "_id.stars": 1 } };
+        business.aggregate([match, project, group, sort], {allowDiskUse:true})
             .toArray()
             .then(docs => {
                 let r = docs;

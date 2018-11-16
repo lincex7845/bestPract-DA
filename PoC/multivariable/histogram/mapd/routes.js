@@ -14,8 +14,8 @@ const _STARS = 'stars'
 const _REVIEW_COUNT = 'review_count'
 const _IS_OPEN = 'is_open'
 const total = 144072
-const query_heatmap = 'select state, stars, avg(review_count) as avg_review_count from business group by state, stars order by state, stars';
-const query_histogram = 'select stars, count(*) as records from business group by stars order by records desc'
+//const query_heatmap = 'select state, stars, avg(review_count) as avg_review_count from business group by state, stars order by state, stars';
+const query_histogram = 'select stars, count(*) as records from business_3M group by stars order by records desc'
 
 
 function formatHistogram(values) {
@@ -78,17 +78,18 @@ module.exports = function (ctx) {
         let draw = query.draw ? parseInt(query.draw, 10) : 0;
         let length = query.length ? parseInt(query.length, 10) : PER_PAGE;
         let offset = query.start ? parseInt(req.query.start, 10) : 0;
-        console.info("querying mapD");
+        //console.info("querying mapD");
         let t0m = process.hrtime();
         Promise.all([
-            session.queryAsync("select count(*) AS records from business where stars between " + min + " and " + max, {}),
-            session.queryAsync("select * from business where stars between " + min + " and " + max + " limit " + length + " offset " + offset, {})
+            session.queryAsync("select count(*) AS records from business_3M where stars between " + min + " and " + max, {}),
+            session.queryAsync("select * from business_3M where stars between " + min + " and " + max + " limit " + length + " offset " + offset, {})
         ])
             .then(values => {
                 const count = parseFloat(values[0][0].records.toString())
                 const r = formatData(values[1])
                 let t1m = process.hrtime(t0m);
-                console.info("querying mapD finished => Execution time (hr): %ds %dms: ", t1m[0], t1m[1] / 1000000);
+                //console.info("querying mapD finished => Execution time (hr): %ds %dms: ", t1m[0], t1m[1] / 1000000);
+                console.info("%ds %dms", t1m[0], t1m[1] / 1000000);
                 const json = {
                     draw: draw,
                     recordsTotal: total,

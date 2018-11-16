@@ -59,9 +59,11 @@ module.exports = function (ctx) {
         console.info("group by stars - starting");
         let t0h = process.hrtime();
         business.aggregate([
+            { $match: { stars: { $gte: 0, $lte: 5 } } },
+            { $project: { _id: 0, stars: 1 } },
             { $group: { _id: "$stars", count: { $sum: 1 } } },
             { $sort: { "count": -1 } }
-        ])
+        ], { allowDiskUse: true })
             .toArray()
             .then(docs => {
                 let r = formatHistogram(docs);

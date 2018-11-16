@@ -14,8 +14,8 @@ const _STARS = 'stars'
 const _REVIEW_COUNT = 'review_count'
 const _IS_OPEN = 'is_open'
 const total = 144072
-const query_heatmap = 'select state, stars, avg(review_count) as avg_review_count from business group by state, stars order by state, stars';
-const query_histogram = 'select stars, count(*) as records from business group by stars order by records desc'
+const query_heatmap = 'select state, stars, avg(review_count) as avg_review_count from business_3M group by state, stars order by state, stars';
+//const query_histogram = 'select stars, count(*) as records from business group by stars order by records desc'
 
 function formatHeatmap(values) {
     var r = values.map(val => {
@@ -58,13 +58,14 @@ module.exports = function (ctx) {
     }));
 
     server.get('/business/heatmap', (_, res, next) => {
-        console.info('grouping by state and stars - starting');
+        //console.info('grouping by state and stars - starting');
         let t0h = process.hrtime();
         session.queryAsync(query_heatmap, {})
             .then(values => {
                 let r = formatHeatmap(values)
                 let t1h = process.hrtime(t0h);
-                console.info("grouping by state and stars finished => Execution time (hr): %ds %dms: ", t1h[0], t1h[1] / 1000000);
+                //console.info("grouping by state and stars finished => Execution time (hr): %ds %dms: ", t1h[0], t1h[1] / 1000000);
+                console.info("%ds %dms", t1h[0], t1h[1] / 1000000);
                 res.send(200, r);
             })
             .catch(err => res.send(500, err));
@@ -83,8 +84,8 @@ module.exports = function (ctx) {
         if (state === '*' && stars === '*') {
 
             Promise.all([
-                session.queryAsync("select count(*) AS records from business", {}),
-                session.queryAsync("select * from business limit " + length + " offset " + offset, {})
+                session.queryAsync("select count(*) AS records from business_3M", {}),
+                session.queryAsync("select * from business_3M limit " + length + " offset " + offset, {})
             ])
                 .then(values => {
                     const count = parseFloat(values[0][0].records.toString())
@@ -104,8 +105,8 @@ module.exports = function (ctx) {
         else {
 
             Promise.all([
-                session.queryAsync("select count(*) AS records from business where state = '" + state + "' and stars = " + stars, {}),
-                session.queryAsync("select * from business where state = '" + state + "' and stars = " + stars + " limit " + length + " offset " + offset, {})
+                session.queryAsync("select count(*) AS records from business_3M where state = '" + state + "' and stars = " + stars, {}),
+                session.queryAsync("select * from business_3M where state = '" + state + "' and stars = " + stars + " limit " + length + " offset " + offset, {})
             ])
                 .then(values => {
                     const count = parseFloat(values[0][0].records.toString())
