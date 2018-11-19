@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <meta name="description" content="Benchmark Test Multivariable data">
+  <meta name="author" content="Camilo Mera">
+  <title>Benchmark Test for Multivariable data</title>
+
+  <!-- Required stylesheet -->
+  <link rel="stylesheet" media="screen" href="deck/core/deck.core.css">
+
+  <!-- Extension CSS files go here. Remove or add as needed. -->
+  <link rel="stylesheet" media="screen" href="deck/extensions/goto/deck.goto.css">
+  <link rel="stylesheet" media="screen" href="deck/extensions/menu/deck.menu.css">
+  <link rel="stylesheet" media="screen" href="deck/extensions/navigation/deck.navigation.css">
+  <link rel="stylesheet" media="screen" href="deck/extensions/status/deck.status.css">
+  <link rel="stylesheet" media="screen" href="deck/extensions/scale/deck.scale.css">
+
+  <!-- Style theme. More available in /themes/style/ or create your own. -->
+  <link rel="stylesheet" media="screen" href="deck/themes/style/swiss.css">
+
+  <!-- Transition theme. More available in /themes/transition/ or create your own. -->
+  <link rel="stylesheet" media="screen" href="deck/themes/transition/horizontal-slide.css">
+
+  <!-- Basic black and white print styles -->
+  <link rel="stylesheet" media="print" href="deck/core/print.css">
+
+  <!-- Required Modernizr file -->
+  <script src="deck/modernizr.custom.js"></script>
+</head>
+
+<body>
+  <div class="deck-container">
+
+    <!-- Begin slides. Just make elements with a class of slide. -->
+
+    <section class="slide">
+      <h2>Benchmark Test for Multivariable data</h2>
+      <p>
+        David Camilo Mera D<br />
+        2018<br />
+      </p>
+      <footer>
+        <p><small>Use arrow keys to browse</small> </p>
+      </footer>
+    </section>
+
+    <section class="slide">
+      <h2>Proof of Concept</h2>
+      <ul>
+        <li>3 database engine to test:
+          <ul>
+            <li>MySQL Community Edition v. 8.0</li>
+            <li>MongoDB Community Server v. 4.0</li>
+            <li>Omni-sci (formely MapD) Community Edition v. 4.0</li>
+          </ul>
+        </li>
+        <li>dataset:
+          <ul>
+            <li>Rows: 144,072</li>
+            <li>Columns: 16</li>
+            <li><img src="img/fields.png"></li>
+          </ul>
+        </li>
+      </ul>
+      <!-- <iframe src="viz/region_area.html" width="1400" height="600" frameborder="0"></iframe> -->
+    </section>
+    <section class="slide">
+      <h2>Query hits vs Response Time</h2>
+      <iframe src="points/test_heatmap.html" width="100%" height="400px" frameborder="0"></iframe>
+    </section>
+    <section class="slide">
+      <h2>Query hits vs Response Time</h2>
+      <iframe src="points/test_histogram.html" width="100%" height="400px" frameborder="0"></iframe>
+    </section>
+    <section class="slide">
+      <h2>Response Time</h2>
+      <iframe src="boxplot/heatmap.html" width="100%" height="500px" frameborder="0"></iframe>
+    </section>
+    <section class="slide">
+        <h2>Response Time</h2>
+        <iframe src="boxplot/histogram.html" width="100%" height="500px" frameborder="0"></iframe>
+      </section>
+    <section class="slide">
+      <h2>Testing with large data</h2>
+      <ul>
+        <li>Synthetic dataset
+            <li>Rows: 3,144,072</li>
+            <li>Columns: 16</li>
+        </li>
+        <li>DB optimizations:
+          <ul>
+            <li>MySQL
+              <ul>
+                <li>innodb_buffer_pool_size: chunk size to perform operations, larger is better</li>
+                <li>innodb_log_buffer_size: buffer to perform operations, larger is better</li>
+                <li>innodb_read_io_threads: I/O threads to perform read operations</li>
+                <li>non unique keys (indexes): stars, state, review_count</li>
+              </ul>
+            </li>
+            <li>MongoDB
+              <ul>
+                <li>wiredTigerCacheSizeGB: internal cache</li>
+                <li>keys: stars, state, stars-state</li>
+                <li>Use $match in aggregation pipeline</li>
+                <li>Use allowDiskUse option to perform sort in aggregation pipeline (limited to 10MB). It enables to write temporary files</li>
+              </ul>
+            </li>
+            <li>Omni-sci
+              <ul>
+                <li>num-gpus: Number of GPUs to use. The default is -1, which means use all available GPUs.</li>
+                <li>allow-cpu-retry: to direct queries, that do not fit in the GPU memory available, to fall back and be executed on the CPU</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+    <section class="slide">
+      <h2>Query hits vs Response Time - large data</h2>
+      <iframe src="points/large_histogram.html" width="100%" height="400px" frameborder="0"></iframe>
+    </section>
+    <section class="slide">
+      <h2>Query hits vs Response Time - large data</h2>
+      <iframe src="points/large_heatmap.html" width="100%" height="400px" frameborder="0"></iframe>
+    </section>
+    <section class="slide">
+      <h2>Response Time - large data</h2>
+      <iframe src="boxplot/large_histogram.html" width="100%" height="500px" frameborder="0"></iframe>
+    </section>
+    <section class="slide">
+        <h2>Response Time - large data</h2>
+        <iframe src="boxplot/large_heatmap.html" width="100%" height="500px" frameborder="0"></iframe>
+      </section>
+    <section class="slide">
+      <h2>Conclusions</h2>
+      <ul>
+        <li>Omni-sci excels at performing queries and aggregations on large datasets due to repetitive operations like grouping can be performed in a parallel maner</li>
+        <li>Omni-sci doesn't excels at performing simple queries and aggregations on small datasets. For this purpouse, MySQL is faster than Omni-sci</li>
+        <li>In case of performing queries and aggregations on large datasets, MySQL seems to be the next option to take into account.
+           The queries performed on MySQL didn't fulfill the minimum threshold (200 ms). However, the median of execution time per query was faster than
+            the median of execution time of the queries performed on MongoDB
+        </li>
+        <li>TO-DO: perform benchmarking tests with MongoDB Enterprise edition, which use in memory database engine</li>
+      </ul>
+    </section>
+
+    <!-- End slides. -->
+
+    <!-- Begin extension snippets. Add or remove as needed. -->
+
+    <!-- deck.navigation snippet -->
+    <div aria-role="navigation">
+      <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+      <a href="#" class="deck-next-link" title="Next">&#8594;</a>
+    </div>
+
+    <!-- deck.status snippet -->
+    <p class="deck-status" aria-role="status">
+      <span class="deck-status-current"></span>
+      /
+      <span class="deck-status-total"></span>
+    </p>
+
+    <!-- deck.goto snippet -->
+    <form action="." method="get" class="goto-form">
+      <label for="goto-slide">Go to slide:</label>
+      <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+      <datalist id="goto-datalist"></datalist>
+      <input type="submit" value="Go">
+    </form>
+
+    <!-- End extension snippets. -->
+  </div>
+
+  <!-- Required JS files. -->
+  <script src="deck/jquery.min.js"></script>
+  <script src="deck/core/deck.core.js"></script>
+
+  <!-- Extensiodeck/n JS files. Add or remove as needed. -->
+  <script src="deck/extensions/menu/deck.menu.js"></script>
+  <script src="deck/extensions/goto/deck.goto.js"></script>
+  <script src="deck/extensions/status/deck.status.js"></script>
+  <script src="deck/extensions/navigation/deck.navigation.js"></script>
+  <script src="deck/extensions/scale/deck.scale.js"></script>
+  <!-- Initialize the deck. You can put this in an external file if desired. -->
+  <script>
+    $(function () {
+      $.deck('.slide');
+    });
+  </script>
+  <script type="text/javascript">
+    vegaEmbed('#vis', 'test_heatmap.vl.json', { defaultStyle: true })
+</script>
+</body>
+
+</html>

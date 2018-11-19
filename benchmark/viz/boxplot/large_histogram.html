@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <style>
+        .svg-container {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <pre>
+      Description:
+      * Test histogram: group by stars
+  </pre>
+    <div id="vis2"></div>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="text/javascript">
+        function setLayout(dataHistogram) {
+          
+            var layout_histogram = {
+                yaxis: {
+                    title: 'response time (sec)',
+                    zeroline: false
+                },
+                boxmode: 'group'
+            }
+            Plotly.newPlot('vis2', dataHistogram, layout_histogram);
+        }
+        function getData() {
+            var color = d3.scaleOrdinal(d3.schemeCategory10);        
+
+            var mapd_histogram = {
+                y: [30.198,0.95,0.97,0.69,0.79,0.66,0.79,0.86,0.83,0.84,0.61,0.70,0.66,0.68,0.61,0.71,0.70,0.63,0.60,0.63,0.62,0.57,0.60,0.59,0.61,0.78,0.66,0.58,0.58,0.64,0.64,0.62,0.69],
+                type: 'box',
+                name: 'MapD',
+                marker: { color: color(3) }
+            }
+
+            var mysql_histogram = {
+                y: [33.974,3.739,3.722,3.767,3.814,3.933,3.942,3.722,3.748,3.931,3.853,3.879,3.768,3.773,3.809,3.784,3.776,3.778,3.754,3.775,3.713,3.989,3.729,3.765,3.772,3.798,3.816,3.784,3.845,3.944,3.736,3.757,3.784],
+                type: 'box',
+                name: 'MySQL',
+                marker: { color: color(4) }
+            }
+
+            var mongo_histogram = {
+                y: [3.250,4.481,3.807,4.584,6.674,9.568,8.222,10.330,6.825,5.166,5.0,4.878,3.41,3.206,3.96,4.602,8.87,12.82,11.805,11.36,7.507,5.211,5.476,4.997,3.186,3.178,3.329,3.309,3.291,3.455,3.427,3.240,4.799],
+                type: 'box',
+                name: 'MongoDB',
+                marker: { color: color(5) }
+            }
+
+            return [mapd_histogram, mysql_histogram, mongo_histogram];
+        }
+        var data = getData();
+        setLayout(data);
+    </script>
+</body>
+
+</html>

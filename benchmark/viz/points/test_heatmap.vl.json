@@ -1,0 +1,30 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v3.json",
+    "description": "xxx",
+    "width": 600, "height": 400,
+    "data": {"url": "data_heatmap.csv", "format":{
+        "type": "csv"
+    }},
+    "selection": {
+      "grid": {
+        "type": "interval", "bind": "scales"
+      }
+    },
+    "mark": "point",
+    "encoding": {
+      "x": {
+          "field":"id",
+          "type": "quantitative",
+          "title": "Hit"
+      },
+      "y": {
+        "field":"ms",
+        "type": "quantitative"
+      },
+      "color": {
+        "field": "series",
+        "type": "nominal",
+        "scale": {"scheme": "set1"}
+      }
+    }
+  }

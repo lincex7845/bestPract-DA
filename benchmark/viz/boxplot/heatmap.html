@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <style>
+        .svg-container {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <pre>
+      Description:
+      * Test heatmap: group by state, stars and average review_count
+  </pre>
+    <div id="vis1"></div>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="text/javascript">
+        function setLayout(dataHeatmap, dataHistogram) {
+            var layout_heatmap = {
+                yaxis: {
+                    title: 'response time (ms)',
+                    zeroline: false
+                },
+                boxmode: 'group'
+            };
+            Plotly.newPlot('vis1', dataHeatmap, layout_heatmap);
+        }
+        function getData() {
+            var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+            var mapd_heatmap = {
+                y: [
+                    57.867146, 48.003416, 62.785494, 65.371193, 53.480142, 53.313415, 53.881495, 46.615886,
+                    49.056501, 54.634448, 47.46574, 48.892661, 53.334342, 51.702171, 50.369153, 60.674767, 45.9004, 54.92936,
+                    48.452434, 55.227422, 56.071589, 55.459965, 52.557681, 51.440964, 44.360542, 54.119022, 47.475487,
+                    59.55997, 50.238888, 44.668655, 47.711608, 41.514221, 47.525056, 50.506873],
+                type: 'box',
+                name: 'MapD',
+                marker: { color: color(0) }
+            };
+
+            var mysql_heatmap = {
+                y: [
+                    215.95921, 214.538289, 218.075868, 214.101256, 228.267328, 226.297946, 212.906813,
+                    222.039169, 222.68764, 228.780876, 225.836785, 224.897111, 224.01273, 212.912626, 218.785308, 215.996222,
+                    237.792431, 214.725294, 214.376873, 222.845259, 218.271139, 224.440346, 218.183426, 219.190145, 214.156454,
+                    224.583658, 220.974161, 216.653052, 214.192569, 220.083778, 216.08593, 216.679316, 239.271212, 293.405956],
+                type: 'box',
+                name: 'MySQL',
+                marker: { color: color(1) }
+            }
+
+            var mongo_heatmap = {
+                y: [179.095793, 173.604686, 174.648681, 173.824518, 179.891767, 176.27193, 175.636833, 176.403145,
+                    176.978925, 174.614168, 177.230619, 181.467207, 176.086436, 193.285062, 181.190802, 181.89342, 188.716403,
+                    182.782963, 180.51021, 176.72767, 186.383566, 181.879274, 184.974456, 178.516133, 186.974712, 192.699774,
+                    194.996757, 182.597538, 177.40581, 179.254204, 184.116221, 180.404932, 181.684949, 199.366202, 178.256918],
+                type: 'box',
+                name: 'MongoDB',
+                marker: { color: color(2) }
+            }
+
+            return [mapd_heatmap, mysql_heatmap, mongo_heatmap];
+        }
+        var data = getData();
+        setLayout(data);
+    </script>
+</body>
+
+</html>
