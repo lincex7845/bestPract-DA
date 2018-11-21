@@ -88,8 +88,7 @@ module.exports = function (ctx) {
                 const count = parseFloat(values[0][0].records.toString())
                 const r = formatData(values[1])
                 let t1m = process.hrtime(t0m);
-                //console.info("querying mapD finished => Execution time (hr): %ds %dms: ", t1m[0], t1m[1] / 1000000);
-                console.info("%ds %dms", t1m[0], t1m[1] / 1000000);
+                console.info("querying mapD finished => Execution time (hr): %ds %dms: ", t1m[0], t1m[1] / 1000000);
                 const json = {
                     draw: draw,
                     recordsTotal: total,

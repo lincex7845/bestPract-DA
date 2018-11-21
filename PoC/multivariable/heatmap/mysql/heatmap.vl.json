@@ -12,8 +12,8 @@
     },
     "mark": "rect",
     "encoding": {
-      "y": {"field": "state", "type": "nominal"},
-      "x": {"field": "stars", "type": "ordinal"},
+      "y": {"field": "stars", "type": "ordinal"},
+      "x": {"field": "state", "type": "nominal"},
       "color": {
         "condition": {
           "selection": "pts",

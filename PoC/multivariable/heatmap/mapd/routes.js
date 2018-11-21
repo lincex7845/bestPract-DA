@@ -64,8 +64,7 @@ module.exports = function (ctx) {
             .then(values => {
                 let r = formatHeatmap(values)
                 let t1h = process.hrtime(t0h);
-                //console.info("grouping by state and stars finished => Execution time (hr): %ds %dms: ", t1h[0], t1h[1] / 1000000);
-                console.info("%ds %dms", t1h[0], t1h[1] / 1000000);
+                console.info("grouping by state and stars finished => Execution time (hr): %ds %dms: ", t1h[0], t1h[1] / 1000000);
                 res.send(200, r);
             })
             .catch(err => res.send(500, err));
