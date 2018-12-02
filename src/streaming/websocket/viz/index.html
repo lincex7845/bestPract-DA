@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>PoC Vega + Streaming</title>
+</head>
+
+<body>
+    <div id="vis"></div>
+    <script src="https://cdn.jsdelivr.net/npm/vega@4.2.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@3.19.2"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script>
+        const series = ['Goverment','Business Services','Construction','Education','Self-employed']
+        const months = ['01','02','03','04','05','06','07','08','09','10','11','12']
+        const years = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010]
+        const spec = "streamgraph.vl.json";
+        vegaEmbed('#vis', spec, { defaultStyle: true })
+            .then(function (result) {
+                const view = result.view;
+
+                // connect to simple echo server
+                const conn = new WebSocket("wss://echo.websocket.org");
+                let data;
+                $.getJSON('/unemployment.json', function(json){
+                    data = json;
+                })
+                conn.onopen = function (event) {
+                    // insert data as it arrives from the socket
+                    conn.onmessage = function (event) {
+                        console.log(event.data);
+                        // Use the Vega view api to insert data
+                        view.insert("stream", JSON.parse(event.data)).run();
+                    }
+
+                    // send some data into the echo socket every second
+                    const interval = window.setInterval(function () {
+                        if (data.length) {
+                            conn.send(JSON.stringify(data.pop()));
+                        } else {
+                            clearInterval(interval);
+                        }
+                        // Generate random data
+                        // var randomSeries = Math.floor(Math.random() * 5) + 0
+                        // var randomYear = Math.floor(Math.random() * 11) + 0
+                        // var randomMonth = Math.floor(Math.random() * 12) + 0
+                        // var randomCount = Math.floor(Math.random() * 500) + 0
+                        // var randomDate = '' + years[randomYear] + '-' + months[randomMonth] + '-01T08:00:00.000Z'
+                        // var data = {
+                        //     series: series[randomSeries],
+                        //     year: years[randomYear],
+                        //     month: months[randomMonth],
+                        //     count: randomCount,
+                        //     date: randomDate
+                        // }
+                        // conn.send(JSON.stringify(data))
+                    }, 1000);
+                }
+            })
+            .catch(console.warn);
+    </script>
+</body>
+
+</html>
