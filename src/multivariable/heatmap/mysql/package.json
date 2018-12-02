@@ -1,0 +1,15 @@
+{
+  "name": "mysql_heatmap",
+  "version": "1.0.0",
+  "description": "Poc: mysql + vega-lite(heatmap) + nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lincex7845",
+  "license": "ISC",
+  "dependencies": {
+    "mysql": "^2.16.0",
+    "restify": "^7.2.1"
+  }
+}

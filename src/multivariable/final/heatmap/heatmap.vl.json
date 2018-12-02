@@ -1,0 +1,28 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+    "data": {"url": "business/heatmap", "format": {"type": "json"}},
+    "selection": {
+      "pts": {
+        "type": "single",
+        "on": "dblclick",
+        "fields": ["_vgsid_"],
+        "resolve": "global",
+        "empty": "all"
+      }
+    },
+    "mark": "rect",
+    "encoding": {
+      "y": {"field": "stars", "type": "ordinal", "title": "stars"},
+      "x": {"field": "state", "type": "ordinal", "title": "state"},
+      "color": {
+        "condition": {
+          "selection": "pts",
+          "field": "avg_review_count",
+          "type": "quantitative",
+          "title": "mean reviews"
+        },
+        "value": "grey"
+      }
+    },
+    "config": {"axisY": {"minExtent": 30}}
+  }
